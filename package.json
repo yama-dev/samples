@@ -1,0 +1,145 @@
+{
+  "name": "samples",
+  "version": "0.1.0",
+  "description": "samples",
+  "author": "yama-dev",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm install && npm run develop",
+    "develop": "npm-run-all -p common:clean develop:js develop:css develop:copy develop:server",
+    "develop:js": "cross-env NODE_ENV=development webpack --mode=development --config .config/webpack.config.babel.js --progress --colors --watch --display-error-details",
+    "develop:css": "nodemon -e scss -x \"npm-run-all -s develop:sass:build develop:postcss:build \"",
+    "develop:sass:build": "node-sass --recursive --include-path scss --output-style expanded --indent-type space --indent-width 2 src/ --output dist/",
+    "develop:postcss:build": "postcss --no-map dist/**/*.css --replace",
+    "develop:copy": "cpx \"./src/**/{*.html,*.css,*.js,*.php,*.svg,*.ico,*.jpg,*.png,*.gif,*.pdf,*.txt,*.xml,*.json,*.md,*.mp4,*.mp3,*.m4a,*.ogg,.*}\" ./dist --watch",
+    "develop:server": "browser-sync start --server ./dist --files dist/**/*.css dist/**/*.js dist/**/*.html",
+    "develop:proxy": "browser-sync start --proxy http://localhost/ --serverStatic ./dist --files dist/**/*.css dist/**/*.js dist/**/*.html",
+    "production": "npm-run-all -s common:clean production:js develop:sass:build develop:postcss:build production:copy",
+    "production:js": "cross-env NODE_ENV=production webpack --mode=production --config .config/webpack.config.babel.js --progress --colors --display-error-details",
+    "production:copy": "cpx \"./src/**/{*.html,*.css,*.js,*.php,*.svg,*.ico,*.jpg,*.png,*.gif,*.pdf,*.txt,*.xml,*.json,*.md,*.mp4,*.mp3,*.m4a,*.ogg,.*}\" ./dist",
+    "common:clean": "rimraf ./dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yama-dev/samples"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.3",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "autoprefixer": "^9.4.8",
+    "babel-loader": "^8.0.5",
+    "browser-sync": "^2.26.3",
+    "cpx": "^1.5.0",
+    "cross-env": "^5.2.0",
+    "css-declaration-sorter": "^4.0.1",
+    "css-loader": "^2.1.1",
+    "css-mqpacker": "^7.0.0",
+    "cssnano": "^4.1.10",
+    "eslint": "^5.14.1",
+    "eslint-loader": "^2.1.2",
+    "glob": "^7.1.3",
+    "node-sass": "^4.11.0",
+    "node-sass-glob-importer": "^5.3.0",
+    "nodemon": "^1.18.10",
+    "npm-run-all": "^4.1.5",
+    "pixrem": "^5.0.0",
+    "postcss-cli": "^6.1.1",
+    "postcss-opacity": "^5.0.0",
+    "rimraf": "^2.6.3",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "terser-webpack-plugin": "^1.3.0",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3"
+  },
+  "dependencies": {
+    "@tweenjs/tween.js": "^17.4.0",
+    "@yama-dev/js-dom": "0.0.6",
+    "js-cookie": "^2.2.0",
+    "js-scroll-effect-module": "^0.8.0",
+    "ogl": "0.0.37",
+    "three": "^0.106.2",
+    "vivus": "^0.4.4"
+  },
+  "config": {
+    "source": "src/",
+    "build": "dist/"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "ie": "11"
+          },
+          "useBuiltIns": "entry",
+          "corejs": 3
+        }
+      ]
+    ]
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "commonjs": true,
+      "es6": true,
+      "jquery": true,
+      "node": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 2018,
+      "sourceType": "module"
+    },
+    "plugins": [],
+    "rules": {
+      "indent": [
+        "error",
+        2,
+        {
+          "outerIIFEBody": 0
+        }
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": [
+        "error",
+        "always"
+      ]
+    }
+  },
+  "browserslist": [
+    "last 2 versions",
+    "not ie < 11",
+    "Android >= 4",
+    "iOS >= 10"
+  ],
+  "postcss": {
+    "map": false,
+    "plugins": {
+      "css-declaration-sorter": {
+        "order": "concentric-css"
+      },
+      "autoprefixer": {},
+      "pixrem": {},
+      "postcss-opacity": {},
+      "css-mqpacker": {}
+    }
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "test/*"
+    ],
+    "delay": "100"
+  }
+}
